@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopee Affiliate AI Generator untuk Threads</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Inter & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        shopee: {
+                            orange: '#EE4D2D',
+                            hover: '#d73e20',
+                            light: '#fff5f3'
+                        },
+                        threads: {
+                            bg: '#101010',
+                            card: '#181818',
+                            border: '#262626',
+                            purple: '#A855F7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(150, 150, 150, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(150, 150, 150, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-threads-bg text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-white/80 dark:bg-threads-bg/80 border-b border-gray-200 dark:border-threads-border">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-shopee-orange via-purple-600 to-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-shopee-orange/20">
+                    <i class="fa-solid fa-at"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-shopee-orange to-purple-500">
+                        Threads Affiliate AI
+                    </h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Shopee Story & Hook Generator</p>
+                </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="flex items-center space-x-3">
+                <button id="apiKeyModalBtn" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-gray-300 dark:border-threads-border text-xs font-medium hover:bg-gray-100 dark:hover:bg-threads-card transition">
+                    <i class="fa-solid fa-key text-amber-500"></i>
+                    <span id="apiKeyStatus">Set Gemini API</span>
+                </button>
+                <button id="themeToggleBtn" class="p-2 rounded-lg border border-gray-300 dark:border-threads-border text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-threads-card transition">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:block"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- API Alert Banner if missing -->
+        <div id="apiKeyBanner" class="hidden mb-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between text-amber-600 dark:text-amber-400 text-sm">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                <span>Masukkan <strong>Gemini API Key</strong> Anda untuk mulai menalar produk dan membuat cerita otomatis secara bebas biaya!</span>
+            </div>
+            <button onclick="openApiModal()" class="px-3 py-1 bg-amber-500 text-white rounded-lg font-medium text-xs hover:bg-amber-600 transition">
+                Set Key
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+            <!-- LEFT PANEL: CONTROLS & INPUT -->
+            <section class="lg:col-span-5 space-y-6">
+                
+                <div class="bg-white dark:bg-threads-card p-6 rounded-2xl border border-gray-200 dark:border-threads-border shadow-sm">
+                    <h2 class="text-base font-semibold mb-4 flex items-center space-x-2">
+                        <i class="fa-solid fa-link text-shopee-orange"></i>
+                        <span>Sumber Produk Shopee</span>
+                    </h2>
+
+                    <!-- Link / Description Input -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Link Produk Shopee / Deskripsi Singkat <span class="text-shopee-orange">*</span>
+                            </label>
+                            <textarea id="productInput" rows="3" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 dark:border-threads-border bg-gray-50 dark:bg-threads-bg text-sm focus:ring-2 focus:ring-shopee-orange focus:outline-none transition resize-none" placeholder="Tempel link shopee di sini (contoh: https://shope.ee/xxx) ATAU sebutkan produk (contoh: 'Lampu tidur proyeksi bulan akrilik')"></textarea>
+                            <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
+                                Tips: Masukkan link atau sertakan jenis barang agar AI bisa menalar manfaat tersembunyinya.
+                            </p>
+                        </div>
+
+                        <!-- Affiliate Custom Link Target -->
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Custom Link Affiliate Anda (Opsional)
+                            </label>
+                            <input type="text" id="affiliateLinkInput" class="w-full px-3.5 py-2 rounded-xl border border-gray-300 dark:border-threads-border bg-gray-50 dark:bg-threads-bg text-sm focus:ring-2 focus:ring-shopee-orange focus:outline-none transition" placeholder="https://shope.ee/link_affiliate_kamu">
+                            <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
+                                Jika diisi, link ini akan otomatis disisipkan di akhir cerita Threads.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category & Tone Options -->
+                <div class="bg-white dark:bg-threads-card p-6 rounded-2xl border border-gray-200 dark:border-threads-border shadow-sm space-y-5">
+                    
+                    <!-- Kategori Konten -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
+                            Pilih Kategori Konten Threads
+                        </label>
+                        <div class="grid grid-cols-2 gap-2.5" id="categoryGrid">
+                            <!-- Options generated dynamically/hardcoded -->
+                            <button type="button" data-cat="softsell" class="cat-btn active p-3 rounded-xl border text-left flex flex-col space-y-1 transition border-shopee-orange bg-shopee-orange/10 text-shopee-orange">
+                                <span class="font-medium text-xs flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-bullhorn"></i>
+                                    <span>Promosi Soft Sell</span>
+                                </span>
+                                <span class="text-[10px] opacity-80">Rekomendasi jujur & santai</span>
+                            </button>
+
+                            <button type="button" data-cat="komedi" class="cat-btn p-3 rounded-xl border border-gray-200 dark:border-threads-border hover:border-shopee-orange/50 text-left flex flex-col space-y-1 transition text-gray-700 dark:text-gray-300">
+                                <span class="font-medium text-xs flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-face-laugh-squint"></i>
+                                    <span>Komedi / Humoris</span>
+                                </span>
+                                <span class="text-[10px] opacity-80">Lucu, konyol & relate</span>
+                            </button>
+
+                            <button type="button" data-cat="storytelling" class="cat-btn p-3 rounded-xl border border-gray-200 dark:border-threads-border hover:border-shopee-orange/50 text-left flex flex-col space-y-1 transition text-gray-700 dark:text-gray-300">
+                                <span class="font-medium text-xs flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-book-open"></i>
+                                    <span>Storytelling</span>
+                                </span>
+                                <span class="text-[10px] opacity-80">Alur narasi mengalir</span>
+                            </button>
+
+                            <button type="button" data-cat="horor" class="cat-btn p-3 rounded-xl border border-gray-200 dark:border-threads-border hover:border-shopee-orange/50 text-left flex flex-col space-y-1 transition text-gray-700 dark:text-gray-300">
+                                <span class="font-medium text-xs flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-ghost"></i>
+                                    <span>Horor / Misteri</span>
+                                </span>
+                                <span class="text-[10px] opacity-80">Seram, bikin kepo</span>
+                            </button>
+
+                            <button type="button" data-cat="curhat" class="cat-btn p-3 rounded-xl border border-gray-200 dark:border-threads-border hover:border-shopee-orange/50 text-left flex flex-col space-y-1 transition text-gray-700 dark:text-gray-300">
+                                <span class="font-medium text-xs flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-heart-crack"></i>
+                                    <span>Kisah Kehidupan</span>
+                                </span>
+                                <span class="text-[10px] opacity-80">Curhat & pengalaman</span>
+                            </button>
+
+                            <button type="button" data-cat="kesehatan" class="cat-btn p-3 rounded-xl border border-gray-200 dark:border-threads-border hover:border-shopee-orange/50 text-left flex flex-col space-y-1 transition text-gray-700 dark:text-gray-300">
+                                <span class="font-medium text-xs flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-notes-medical"></i>
+                                    <span>Tips & Kesehatan</span>
+                                </span>
+                                <span class="text-[10px] opacity-80">Solutif & edukatif</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Gaya Bahasa (Tone) -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">
+                            Tone / Gaya Bahasa
+                        </label>
+                        <select id="toneSelect" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 dark:border-threads-border bg-gray-50 dark:bg-threads-bg text-sm focus:ring-2 focus:ring-shopee-orange focus:outline-none transition">
+                            <option value="Penasaran & Misterius">Bikin Penasaran & Misterius (Curiosity Gap)</option>
+                            <option value="Santai & Friendly">Santai, Akrab & Gaul (Ala Anak Threads)</option>
+                            <option value="Emosional & Menyentuh">Emosional & Menyentuh Hati</option>
+                            <option value="Konyol & Sarkas">Konyol, Sarkas & Komedis</option>
+                            <option value="Edukatif & Meyakinkan">Edukatif & Didasari Pengalaman</option>
+                        </select>
+                    </div>
+
+                    <!-- Mode Utas (Thread Mode) -->
+                    <div class="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-threads-border/50">
+                        <div>
+                            <label for="threadModeToggle" class="text-xs font-semibold cursor-pointer">
+                                Buat Utas Threads (2-3 Post)
+                            </label>
+                            <p class="text-[11px] text-gray-500 dark:text-gray-400">Pecah tulisan jadi beberapa bagian utas agar lebih interaktif.</p>
+                        </div>
+                        <input type="checkbox" id="threadModeToggle" class="w-4 h-4 accent-shopee-orange rounded cursor-pointer">
+                    </div>
+
+                    <!-- Action Button -->
+                    <button id="generateBtn" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-shopee-orange to-purple-600 hover:from-shopee-hover hover:to-purple-700 text-white font-semibold text-sm shadow-lg shadow-shopee-orange/20 flex items-center justify-center space-x-2 transition transform active:scale-[0.98]">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Generate Konten Threads</span>
+                    </button>
+
+                </div>
+
+            </section>
+
+            <!-- RIGHT PANEL: PREVIEW & OUTPUT -->
+            <section class="lg:col-span-7 space-y-6">
+                
+                <div class="bg-white dark:bg-threads-card rounded-2xl border border-gray-200 dark:border-threads-border shadow-sm overflow-hidden flex flex-col min-h-[500px]">
+                    
+                    <!-- Card Header -->
+                    <div class="p-4 border-b border-gray-200 dark:border-threads-border flex items-center justify-between bg-gray-50/50 dark:bg-threads-bg/50">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 font-medium ml-2">Preview Feed Threads</span>
+                        </div>
+
+                        <div class="flex items-center space-x-2">
+                            <button id="copyBtn" disabled class="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-threads-border text-xs font-medium hover:bg-gray-100 dark:hover:bg-threads-bg disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center space-x-1.5">
+                                <i class="fa-regular fa-copy"></i>
+                                <span>Salin Teks</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Content Output Area -->
+                    <div id="outputContainer" class="p-6 flex-1 flex flex-col justify-center items-center text-center">
+                        <!-- Initial State -->
+                        <div id="emptyState" class="max-w-sm space-y-3 py-12">
+                            <div class="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-threads-bg flex items-center justify-center mx-auto text-gray-400 text-2xl">
+                                <i class="fa-regular fa-paper-plane"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-700 dark:text-gray-300">Belum Ada Konten</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                Masukkan link/nama produk Shopee di sebelah kiri, pilih gaya cerita yang diinginkan, lalu klik <strong>Generate Konten</strong>.
+                            </p>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div id="loadingState" class="hidden py-16 flex flex-col items-center space-y-4">
+                            <div class="relative w-12 h-12">
+                                <div class="absolute top-0 left-0 w-full h-full border-4 border-shopee-orange/20 rounded-full"></div>
+                                <div class="absolute top-0 left-0 w-full h-full border-4 border-shopee-orange border-t-transparent rounded-full animate-spin"></div>
+                            </div>
+                            <p class="text-xs font-medium text-gray-600 dark:text-gray-300 animate-pulse" id="loadingText">
+                                Menalar produk & merangkai cerita pemicu rasa penasaran...
+                            </p>
+                        </div>
+
+                        <!-- Threads Posts Stream -->
+                        <div id="threadsStream" class="hidden w-full space-y-6 text-left">
+                            <!-- Post Card template added via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Footer Info -->
+                    <div class="p-4 border-t border-gray-200 dark:border-threads-border text-xs text-gray-500 dark:text-gray-400 flex items-center justify-between bg-gray-50/30 dark:bg-threads-bg/30">
+                        <span id="charCount">0 Karakter</span>
+                        <span class="flex items-center space-x-1">
+                            <i class="fa-solid fa-bolt text-amber-500"></i>
+                            <span>Powered by Gemini 3 Flash</span>
+                        </span>
+                    </div>
+
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <!-- Modal API Key -->
+    <div id="apiModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-threads-card max-w-md w-full rounded-2xl p-6 border border-gray-200 dark:border-threads-border shadow-2xl space-y-5">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-key text-amber-500 text-lg"></i>
+                    <h3 class="font-bold text-base">Pengaturan Gemini API Key</h3>
+                </div>
+                <button onclick="closeApiModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                Aplikasi ini membutuhkan API Key dari Google Gemini untuk membuat naskah cerita otomatis. API Key disimpan secara lokal di browser Anda.
+            </p>
+
+            <div>
+                <label class="block text-xs font-medium mb-1.5">Gemini API Key</label>
+                <input type="password" id="apiKeyInput" placeholder="AIzaSy..." class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 dark:border-threads-border bg-gray-50 dark:bg-threads-bg text-sm focus:ring-2 focus:ring-shopee-orange focus:outline-none">
+                <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-2">
+                    Belum punya key? Dapatkan gratis di <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-shopee-orange underline">Google AI Studio</a>.
+                </p>
+            </div>
+
+            <div class="flex items-center justify-end space-x-3 pt-2">
+                <button onclick="closeApiModal()" class="px-4 py-2 rounded-xl text-xs font-medium border border-gray-300 dark:border-threads-border hover:bg-gray-100 dark:hover:bg-threads-bg">
+                    Batal
+                </button>
+                <button onclick="saveApiKey()" class="px-4 py-2 rounded-xl text-xs font-medium bg-shopee-orange text-white hover:bg-shopee-hover shadow-md">
+                    Simpan Key
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-gray-900 text-white dark:bg-white dark:text-gray-900 px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 text-xs font-medium">
+        <i id="toastIcon" class="fa-solid fa-check text-green-400 dark:text-green-600"></i>
+        <span id="toastMsg">Berhasil menyalin naskah!</span>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        // State Management
+        let selectedCategory = 'softsell';
+        let generatedText = '';
+
+        // DOM Elements
+        const productInput = document.getElementById('productInput');
+        const affiliateLinkInput = document.getElementById('affiliateLinkInput');
+        const toneSelect = document.getElementById('toneSelect');
+        const threadModeToggle = document.getElementById('threadModeToggle');
+        const generateBtn = document.getElementById('generateBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const categoryGrid = document.getElementById('categoryGrid');
+        
+        const emptyState = document.getElementById('emptyState');
+        const loadingState = document.getElementById('loadingState');
+        const threadsStream = document.getElementById('threadsStream');
+        const charCount = document.getElementById('charCount');
+
+        const apiModal = document.getElementById('apiModal');
+        const apiKeyInput = document.getElementById('apiKeyInput');
+        const apiKeyStatus = document.getElementById('apiKeyStatus');
+        const apiKeyBanner = document.getElementById('apiKeyBanner');
+
+        // Initial setup
+        window.onload = function() {
+            checkApiKey();
+            setupTheme();
+        };
+
+        // Theme Toggle Logic
+        function setupTheme() {
+            const themeBtn = document.getElementById('themeToggleBtn');
+            themeBtn.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+            });
+        }
+
+        // Category Selection Handling
+        categoryGrid.addEventListener('click', (e) => {
+            const button = e.target.closest('.cat-btn');
+            if (!button) return;
+
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('border-shopee-orange', 'bg-shopee-orange/10', 'text-shopee-orange', 'active');
+                btn.classList.add('border-gray-200', 'dark:border-threads-border', 'text-gray-700', 'dark:text-gray-300');
+            });
+
+            button.classList.add('border-shopee-orange', 'bg-shopee-orange/10', 'text-shopee-orange', 'active');
+            button.classList.remove('border-gray-200', 'dark:border-threads-border', 'text-gray-700', 'dark:text-gray-300');
+            
+            selectedCategory = button.getAttribute('data-cat');
+        });
+
+        // API Key Modal Handlers
+        document.getElementById('apiKeyModalBtn').addEventListener('click', openApiModal);
+
+        function openApiModal() {
+            apiKeyInput.value = localStorage.getItem('gemini_api_key') || '';
+            apiModal.classList.remove('hidden');
+        }
+
+        function closeApiModal() {
+            apiModal.classList.add('hidden');
+        }
+
+        function saveApiKey() {
+            const key = apiKeyInput.value.trim();
+            if (key) {
+                localStorage.setItem('gemini_api_key', key);
+                showToast('API Key berhasil disimpan!', 'success');
+            } else {
+                localStorage.removeItem('gemini_api_key');
+                showToast('API Key dihapus.', 'info');
+            }
+            checkApiKey();
+            closeApiModal();
+        }
+
+        function checkApiKey() {
+            const key = localStorage.getItem('gemini_api_key');
+            if (key) {
+                apiKeyStatus.textContent = 'API Key Set';
+                apiKeyStatus.classList.add('text-green-500');
+                apiKeyBanner.classList.add('hidden');
+            } else {
+                apiKeyStatus.textContent = 'Set Gemini API';
+                apiKeyStatus.classList.remove('text-green-500');
+                apiKeyBanner.classList.remove('hidden');
+            }
+        }
+
+        // Toast Message System
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.textContent = message;
+            if (type === 'success') {
+                toastIcon.className = 'fa-solid fa-circle-check text-green-400';
+            } else if (type === 'error') {
+                toastIcon.className = 'fa-solid fa-circle-exclamation text-red-400';
+            } else {
+                toastIcon.className = 'fa-solid fa-circle-info text-blue-400';
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Category Prompts Mapping
+        const categoryPrompts = {
+            softsell: "Buatkan postingan rekomendasi produk jujur dan halus (soft sell). Mulai dari masalah sepele sehari-hari, berikan solusinya secara santai tanpa terkesan memaksa jualan.",
+            komedi: "Buatkan postingan humoris / komedi konyol yang relate dengan kehidupan masyarakat Indonesia. Kaitkan situasi lucu atau konyol tersebut secara jenaka dengan produk.",
+            storytelling: "Buatkan postingan berbentuk alur cerita narasional (storytelling) yang menarik dari awal hingga akhir. Buat pembaca penasaran dengan apa yang terjadi di tengah cerita.",
+            horor: "Buatkan cerita horor / misteri pendek yang bikin merinding atau penasaran setengah mati. Kaitkan barang/produk ini sebagai bagian dari plot misteri tersebut secara kreatif.",
+            curhat: "Buatkan postingan bergaya curhat emosional / kisah kehidupan pribadi. Bicarakan perjuangan atau momen unik, lalu selipkan produk sebagai barang pembawa perubahan/penyelamat.",
+            kesehatan: "Buatkan tips hidup sehat atau saran praktis sehari-hari. Jelaskan pentingnya menjaga kenyamanan/kesehatan dan bagaimana produk ini sangat membantu."
+        };
+
+        // Main Generation Logic using Gemini API
+        generateBtn.addEventListener('click', async () => {
+            const rawInput = productInput.value.trim();
+            const customAffiliateLink = affiliateLinkInput.value.trim();
+            const tone = toneSelect.value;
+            const isThread = threadModeToggle.checked;
+
+            if (!rawInput) {
+                showToast('Harap masukkan link atau deskripsi produk Shopee!', 'error');
+                productInput.focus();
+                return;
+            }
+
+            // Show Loading
+            emptyState.classList.add('hidden');
+            threadsStream.classList.add('hidden');
+            loadingState.classList.remove('hidden');
+            generateBtn.disabled = true;
+            generateBtn.classList.add('opacity-50');
+
+            // Construct Gemini Prompt
+            const categoryDesc = categoryPrompts[selectedCategory] || categoryPrompts.softsell;
+            const linkToUse = customAffiliateLink || (rawInput.startsWith('http') ? rawInput : 'https://shope.ee/contoh_link');
+
+            const systemPrompt = `
+Anda adalah seorang kreator konten viral ahli di platform Threads (Meta Threads) dan ahli Copywriting Shopee Affiliate.
+Tugas Anda adalah menalar produk dari input pengguna (URL atau deskripsi barang) dan membuatkan naskah postingan Threads yang SANGAT MEMINCIK RASA PENASARAN (curiosity gap) agar pembaca terdorong mengklik link.
+
+Aturan Penting:
+1. Gaya Penulisan: Gunakan gaya bahasa khas Threads yang luwes, alami, sering menggunakan spasi antar kalimat agar nyaman dibaca di smartphone.
+2. Gaya Bahasa (Tone): ${tone}.
+3. Kategori Konten: ${categoryDesc}.
+4. Penulisan Link (Hook Halus): Di akhir postingan, cantumkan ajakan mengklik link dengan elegan. Jangan hard sell seperti "Beli di sini!". Gunakan kalimat seperti "Yang kepo barang unik ini, cek di sini ya: [LINK]" atau "Aku taro link barang misterius ini di sini: [LINK]".
+5. Gunakan placeholder [LINK_AFFILIATE] untuk penempatan link affiliate.
+6. Jika mode Utas (Thread) diaktifkan (${isThread ? 'YA' : 'TIDAK'}):
+   ${isThread ? 'Pecah naskah menjadi 2 atau 3 postingan terpisah yang saling menyambung. Beri tanda pembatas tajam "---PARAGRAF_THREAD---" di antara postingan 1, 2, dan 3.' : 'Buat dalam 1 postingan utuh yang solid dan menarik.'}
+7. JANGAN sebut secara blak-blakan semua detail teknis produk di awal. Biarkan ada misteri/keunikan yang hanya bisa terjawab jika mengklik link!
+            `;
+
+            const userQuery = `
+Produk / Link Shopee: ${rawInput}
+Link Affiliate yang disisipkan: ${linkToUse}
+Format Thread: ${isThread ? 'Multi-post Thread' : 'Single Post'}
+            `;
+
+            // Call Gemini API (Exponential Backoff Handling)
+            try {
+                const apiKey = localStorage.getItem('gemini_api_key') || "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const payload = {
+                    contents: [{ parts: [{ text: userQuery }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                };
+
+                let response = await fetchWithRetry(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
+                    let resultText = data.candidates[0].content.parts[0].text;
+                    // Replace link placeholder if any
+                    resultText = resultText.replaceAll('[LINK_AFFILIATE]', linkToUse);
+                    if (!resultText.includes(linkToUse)) {
+                        resultText += `\n\nYang mau tau barangnya, cek di sini: ${linkToUse}`;
+                    }
+
+                    renderThreadsResult(resultText, isThread, linkToUse);
+                    showToast('Konten Threads berhasil digenerate!', 'success');
+                } else {
+                    throw new Error('Gagal mendapatkan respon valid dari Gemini AI.');
+                }
+
+            } catch (err) {
+                console.error(err);
+                showToast(err.message || 'Terjadi kesalahan saat generate konten.', 'error');
+                emptyState.classList.remove('hidden');
+            } finally {
+                loadingState.classList.add('hidden');
+                generateBtn.disabled = false;
+                generateBtn.classList.remove('opacity-50');
+            }
+        });
+
+        // Exponential backoff fetch wrapper
+        async function fetchWithRetry(url, options, maxRetries = 3) {
+            let delay = 1000;
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const res = await fetch(url, options);
+                    if (res.status === 429) {
+                        // Rate limit wait
+                        await new Promise(r => setTimeout(r, delay));
+                        delay *= 2;
+                        continue;
+                    }
+                    if (!res.ok) {
+                        const errData = await res.json().catch(() => ({}));
+                        throw new Error(errData.error?.message || `HTTP error! status: ${res.status}`);
+                    }
+                    return res;
+                } catch (e) {
+                    if (i === maxRetries - 1) throw e;
+                    await new Promise(r => setTimeout(r, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
+        // Render Threads UI Preview
+        function renderThreadsResult(text, isThread, link) {
+            threadsStream.innerHTML = '';
+            generatedText = text;
+
+            const posts = isThread ? text.split('---PARAGRAF_THREAD---') : [text];
+
+            posts.forEach((postContent, idx) => {
+                const cleanedContent = postContent.trim();
+                if (!cleanedContent) return;
+
+                const postCard = document.createElement('div');
+                postCard.className = 'bg-gray-50 dark:bg-threads-bg p-5 rounded-2xl border border-gray-200 dark:border-threads-border space-y-3 relative transition hover:border-gray-300 dark:hover:border-gray-700';
+
+                // Format links to be clickable/highlighted in preview
+                const formattedText = escapeHtml(cleanedContent).replace(
+                    /(https?:\/\/[^\s]+)/g, 
+                    '<a href="$1" target="_blank" class="text-shopee-orange underline font-medium break-all">$1</a>'
+                );
+
+                postCard.innerHTML = `
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-purple-500 to-shopee-orange flex items-center justify-center text-white text-xs font-bold">
+                                me
+                            </div>
+                            <div>
+                                <div class="flex items-center space-x-1">
+                                    <span class="text-xs font-bold">affiliate_creator</span>
+                                    <i class="fa-solid fa-circle-check text-blue-500 text-[10px]"></i>
+                                </div>
+                                <span class="text-[10px] text-gray-500 dark:text-gray-400">Post ${idx + 1} dari ${posts.length}</span>
+                            </div>
+                        </div>
+                        <button onclick="copySinglePost(\`${escapeJsString(cleanedContent)}\`)" class="text-gray-400 hover:text-shopee-orange text-xs p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-threads-card transition" title="Salin Bagian Ini">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+
+                    <div class="text-sm leading-relaxed whitespace-pre-line text-gray-800 dark:text-gray-200 pl-1">
+                        ${formattedText}
+                    </div>
+
+                    <div class="pt-2 flex items-center space-x-4 text-gray-400 text-xs border-t border-gray-200/60 dark:border-threads-border/40">
+                        <span class="hover:text-red-500 cursor-pointer transition"><i class="fa-regular fa-heart"></i></span>
+                        <span class="hover:text-blue-500 cursor-pointer transition"><i class="fa-regular fa-comment"></i></span>
+                        <span class="hover:text-green-500 cursor-pointer transition"><i class="fa-solid fa-repeat"></i></span>
+                        <span class="hover:text-shopee-orange cursor-pointer transition"><i class="fa-regular fa-paper-plane"></i></span>
+                    </div>
+                `;
+
+                threadsStream.appendChild(postCard);
+            });
+
+            threadsStream.classList.remove('hidden');
+            copyBtn.disabled = false;
+            charCount.textContent = `${text.length} Karakter Total`;
+        }
+
+        // Copy Clipboard Helpers
+        copyBtn.addEventListener('click', () => {
+            if (!generatedText) return;
+            const textToCopy = generatedText.replaceAll('---PARAGRAF_THREAD---', '\n\n');
+            copyToClipboard(textToCopy);
+            showToast('Seluruh teks naskah berhasil disalin!', 'success');
+        });
+
+        function copySinglePost(content) {
+            copyToClipboard(content);
+            showToast('Bagian postingan berhasil disalin!', 'success');
+        }
+
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;")
+                      .replace(/</g, "&lt;")
+                      .replace(/>/g, "&gt;")
+                      .replace(/"/g, "&quot;")
+                      .replace(/'/g, "&#039;");
+        }
+
+        function escapeJsString(str) {
+            return str.replace(/\\/g, '\\\\')
+                      .replace(/`/g, '\\`')
+                      .replace(/\$/g, '\\$');
+        }
+    </script>
+</body>
+</html>
