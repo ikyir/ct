@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopee Affiliate AI Generator untuk Threads</title>
+    <title>Shopee Affiliate AI Story Generator untuk Threads</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Inter & Font Awesome -->
@@ -39,7 +39,6 @@
         body {
             font-family: 'Inter', sans-serif;
         }
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -69,7 +68,7 @@
                     <h1 class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-shopee-orange to-purple-500">
                         Threads Affiliate AI
                     </h1>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Shopee Story & Hook Generator</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Penalaran Produk Akurat & Curiosity Story Generator</p>
                 </div>
             </div>
 
@@ -94,7 +93,7 @@
         <div id="apiKeyBanner" class="hidden mb-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between text-amber-600 dark:text-amber-400 text-sm">
             <div class="flex items-center space-x-3">
                 <i class="fa-solid fa-triangle-exclamation text-lg"></i>
-                <span>Masukkan <strong>Gemini API Key</strong> Anda untuk mulai menalar produk dan membuat cerita otomatis secara bebas biaya!</span>
+                <span>Masukkan <strong>Gemini API Key</strong> Anda untuk mulai menghasilkan naskah Threads dengan penalaran produk akurat!</span>
             </div>
             <button onclick="openApiModal()" class="px-3 py-1 bg-amber-500 text-white rounded-lg font-medium text-xs hover:bg-amber-600 transition">
                 Set Key
@@ -106,33 +105,53 @@
             <!-- LEFT PANEL: CONTROLS & INPUT -->
             <section class="lg:col-span-5 space-y-6">
                 
-                <div class="bg-white dark:bg-threads-card p-6 rounded-2xl border border-gray-200 dark:border-threads-border shadow-sm">
-                    <h2 class="text-base font-semibold mb-4 flex items-center space-x-2">
-                        <i class="fa-solid fa-link text-shopee-orange"></i>
-                        <span>Sumber Produk Shopee</span>
-                    </h2>
+                <!-- Dual Input Source -->
+                <div class="bg-white dark:bg-threads-card p-6 rounded-2xl border border-gray-200 dark:border-threads-border shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-base font-semibold flex items-center space-x-2">
+                            <i class="fa-solid fa-bullseye text-shopee-orange"></i>
+                            <span>Detail Produk Shopee</span>
+                        </h2>
+                        <span class="text-[11px] text-gray-400">Akurat & Bebas Halusinasi</span>
+                    </div>
 
-                    <!-- Link / Description Input -->
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Link Produk Shopee / Deskripsi Singkat <span class="text-shopee-orange">*</span>
+                    <!-- Link Input -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Link Shopee / Link Affiliate <span class="text-shopee-orange">*</span>
+                        </label>
+                        <input type="text" id="shopeeLinkInput" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 dark:border-threads-border bg-gray-50 dark:bg-threads-bg text-sm focus:ring-2 focus:ring-shopee-orange focus:outline-none transition" placeholder="https://shope.ee/xxxx atau https://shopee.co.id/product/...">
+                    </div>
+
+                    <!-- Product Name & Features (Akurasi Tinggi) -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                                Nama Produk & Keunggulan Utama <span class="text-shopee-orange">*</span>
                             </label>
-                            <textarea id="productInput" rows="3" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 dark:border-threads-border bg-gray-50 dark:bg-threads-bg text-sm focus:ring-2 focus:ring-shopee-orange focus:outline-none transition resize-none" placeholder="Tempel link shopee di sini (contoh: https://shope.ee/xxx) ATAU sebutkan produk (contoh: 'Lampu tidur proyeksi bulan akrilik')"></textarea>
-                            <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
-                                Tips: Masukkan link atau sertakan jenis barang agar AI bisa menalar manfaat tersembunyinya.
-                            </p>
+                            <span class="text-[10px] text-shopee-orange font-medium">Sangat Disarankan</span>
                         </div>
+                        <textarea id="productDetailInput" rows="3" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 dark:border-threads-border bg-gray-50 dark:bg-threads-bg text-sm focus:ring-2 focus:ring-shopee-orange focus:outline-none transition resize-none" placeholder="Sebutkan nama barang & kegunaannya secara spesifik. Contoh: Lampu Tidur Proyektor Bintang LED, hemat listrik, warna RGB, include remote."></textarea>
+                        <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
+                            AI akan menalar fungsi fisik & emosional khusus dari produk ini.
+                        </p>
+                    </div>
 
-                        <!-- Affiliate Custom Link Target -->
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Custom Link Affiliate Anda (Opsional)
-                            </label>
-                            <input type="text" id="affiliateLinkInput" class="w-full px-3.5 py-2 rounded-xl border border-gray-300 dark:border-threads-border bg-gray-50 dark:bg-threads-bg text-sm focus:ring-2 focus:ring-shopee-orange focus:outline-none transition" placeholder="https://shope.ee/link_affiliate_kamu">
-                            <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
-                                Jika diisi, link ini akan otomatis disisipkan di akhir cerita Threads.
-                            </p>
+                    <!-- Quick Fill Samples -->
+                    <div>
+                        <label class="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-2">
+                            Contoh Cepat (Quick Fill):
+                        </label>
+                        <div class="flex flex-wrap gap-1.5">
+                            <button type="button" onclick="quickFill('lampu')" class="px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-threads-bg hover:bg-shopee-orange/10 hover:text-shopee-orange text-[11px] border border-gray-200 dark:border-threads-border transition">
+                                💡 Lampu Tidur Proyektor
+                            </button>
+                            <button type="button" onclick="quickFill('panci')" class="px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-threads-bg hover:bg-shopee-orange/10 hover:text-shopee-orange text-[11px] border border-gray-200 dark:border-threads-border transition">
+                                🍳 Panci Granit Anti Lengket
+                            </button>
+                            <button type="button" onclick="quickFill('minyak')" class="px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-threads-bg hover:bg-shopee-orange/10 hover:text-shopee-orange text-[11px] border border-gray-200 dark:border-threads-border transition">
+                                🌿 Roll On Aromaterapi
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -143,16 +162,15 @@
                     <!-- Kategori Konten -->
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
-                            Pilih Kategori Konten Threads
+                            Pilih Kategori Konten
                         </label>
                         <div class="grid grid-cols-2 gap-2.5" id="categoryGrid">
-                            <!-- Options generated dynamically/hardcoded -->
                             <button type="button" data-cat="softsell" class="cat-btn active p-3 rounded-xl border text-left flex flex-col space-y-1 transition border-shopee-orange bg-shopee-orange/10 text-shopee-orange">
                                 <span class="font-medium text-xs flex items-center space-x-1.5">
                                     <i class="fa-solid fa-bullhorn"></i>
                                     <span>Promosi Soft Sell</span>
                                 </span>
-                                <span class="text-[10px] opacity-80">Rekomendasi jujur & santai</span>
+                                <span class="text-[10px] opacity-80">Pengalaman nyata & rekomendasi</span>
                             </button>
 
                             <button type="button" data-cat="komedi" class="cat-btn p-3 rounded-xl border border-gray-200 dark:border-threads-border hover:border-shopee-orange/50 text-left flex flex-col space-y-1 transition text-gray-700 dark:text-gray-300">
@@ -160,7 +178,7 @@
                                     <i class="fa-solid fa-face-laugh-squint"></i>
                                     <span>Komedi / Humoris</span>
                                 </span>
-                                <span class="text-[10px] opacity-80">Lucu, konyol & relate</span>
+                                <span class="text-[10px] opacity-80">Kejadian lucu terkait produk</span>
                             </button>
 
                             <button type="button" data-cat="storytelling" class="cat-btn p-3 rounded-xl border border-gray-200 dark:border-threads-border hover:border-shopee-orange/50 text-left flex flex-col space-y-1 transition text-gray-700 dark:text-gray-300">
@@ -168,7 +186,7 @@
                                     <i class="fa-solid fa-book-open"></i>
                                     <span>Storytelling</span>
                                 </span>
-                                <span class="text-[10px] opacity-80">Alur narasi mengalir</span>
+                                <span class="text-[10px] opacity-80">Narasi mengalir & berkesan</span>
                             </button>
 
                             <button type="button" data-cat="horor" class="cat-btn p-3 rounded-xl border border-gray-200 dark:border-threads-border hover:border-shopee-orange/50 text-left flex flex-col space-y-1 transition text-gray-700 dark:text-gray-300">
@@ -176,15 +194,15 @@
                                     <i class="fa-solid fa-ghost"></i>
                                     <span>Horor / Misteri</span>
                                 </span>
-                                <span class="text-[10px] opacity-80">Seram, bikin kepo</span>
+                                <span class="text-[10px] opacity-80">Misteri kamar/situasi produk</span>
                             </button>
 
                             <button type="button" data-cat="curhat" class="cat-btn p-3 rounded-xl border border-gray-200 dark:border-threads-border hover:border-shopee-orange/50 text-left flex flex-col space-y-1 transition text-gray-700 dark:text-gray-300">
                                 <span class="font-medium text-xs flex items-center space-x-1.5">
-                                    <i class="fa-solid fa-heart-crack"></i>
+                                    <i class="fa-solid fa-heart-broken"></i>
                                     <span>Kisah Kehidupan</span>
                                 </span>
-                                <span class="text-[10px] opacity-80">Curhat & pengalaman</span>
+                                <span class="text-[10px] opacity-80">Curhat masalah & penyelamat</span>
                             </button>
 
                             <button type="button" data-cat="kesehatan" class="cat-btn p-3 rounded-xl border border-gray-200 dark:border-threads-border hover:border-shopee-orange/50 text-left flex flex-col space-y-1 transition text-gray-700 dark:text-gray-300">
@@ -192,22 +210,22 @@
                                     <i class="fa-solid fa-notes-medical"></i>
                                     <span>Tips & Kesehatan</span>
                                 </span>
-                                <span class="text-[10px] opacity-80">Solutif & edukatif</span>
+                                <span class="text-[10px] opacity-80">Solutif & fungsional</span>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Gaya Bahasa (Tone) -->
+                    <!-- Tone Selection -->
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">
-                            Tone / Gaya Bahasa
+                            Gaya Bahasa (Tone)
                         </label>
                         <select id="toneSelect" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 dark:border-threads-border bg-gray-50 dark:bg-threads-bg text-sm focus:ring-2 focus:ring-shopee-orange focus:outline-none transition">
-                            <option value="Penasaran & Misterius">Bikin Penasaran & Misterius (Curiosity Gap)</option>
-                            <option value="Santai & Friendly">Santai, Akrab & Gaul (Ala Anak Threads)</option>
-                            <option value="Emosional & Menyentuh">Emosional & Menyentuh Hati</option>
-                            <option value="Konyol & Sarkas">Konyol, Sarkas & Komedis</option>
-                            <option value="Edukatif & Meyakinkan">Edukatif & Didasari Pengalaman</option>
+                            <option value="Sangat Misterius (Curiosity Gap High)">Sangat Misterius & Penasaran (Curiosity Gap Tinggi)</option>
+                            <option value="Santai, Gaul & Relatable">Santai, Gaul & Relatable (Khas Threads)</option>
+                            <option value="Emosional & Menyentuh Hati">Emosional & Menyentuh Hati</option>
+                            <option value="Konyol, Lucu & Sarkas">Konyol, Lucu & Sarkas</option>
+                            <option value="Informatif & Jujur">Informatif, Jujur & Solutif</option>
                         </select>
                     </div>
 
@@ -215,14 +233,14 @@
                     <div class="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-threads-border/50">
                         <div>
                             <label for="threadModeToggle" class="text-xs font-semibold cursor-pointer">
-                                Buat Utas Threads (2-3 Post)
+                                Buat Mode Utas Threads (2-3 Post)
                             </label>
-                            <p class="text-[11px] text-gray-500 dark:text-gray-400">Pecah tulisan jadi beberapa bagian utas agar lebih interaktif.</p>
+                            <p class="text-[11px] text-gray-500 dark:text-gray-400">Pecah tulisan jadi beberapa post agar interaksi postingan meningkat.</p>
                         </div>
                         <input type="checkbox" id="threadModeToggle" class="w-4 h-4 accent-shopee-orange rounded cursor-pointer">
                     </div>
 
-                    <!-- Action Button -->
+                    <!-- Generate Button -->
                     <button id="generateBtn" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-shopee-orange to-purple-600 hover:from-shopee-hover hover:to-purple-700 text-white font-semibold text-sm shadow-lg shadow-shopee-orange/20 flex items-center justify-center space-x-2 transition transform active:scale-[0.98]">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
                         <span>Generate Konten Threads</span>
@@ -235,7 +253,7 @@
             <!-- RIGHT PANEL: PREVIEW & OUTPUT -->
             <section class="lg:col-span-7 space-y-6">
                 
-                <div class="bg-white dark:bg-threads-card rounded-2xl border border-gray-200 dark:border-threads-border shadow-sm overflow-hidden flex flex-col min-h-[500px]">
+                <div class="bg-white dark:bg-threads-card rounded-2xl border border-gray-200 dark:border-threads-border shadow-sm overflow-hidden flex flex-col min-h-[520px]">
                     
                     <!-- Card Header -->
                     <div class="p-4 border-b border-gray-200 dark:border-threads-border flex items-center justify-between bg-gray-50/50 dark:bg-threads-bg/50">
@@ -249,7 +267,7 @@
                         <div class="flex items-center space-x-2">
                             <button id="copyBtn" disabled class="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-threads-border text-xs font-medium hover:bg-gray-100 dark:hover:bg-threads-bg disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center space-x-1.5">
                                 <i class="fa-regular fa-copy"></i>
-                                <span>Salin Teks</span>
+                                <span>Salin Semua Teks</span>
                             </button>
                         </div>
                     </div>
@@ -261,9 +279,9 @@
                             <div class="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-threads-bg flex items-center justify-center mx-auto text-gray-400 text-2xl">
                                 <i class="fa-regular fa-paper-plane"></i>
                             </div>
-                            <h3 class="font-semibold text-gray-700 dark:text-gray-300">Belum Ada Konten</h3>
+                            <h3 class="font-semibold text-gray-700 dark:text-gray-300">Penalaran Produk Presisi</h3>
                             <p class="text-xs text-gray-500 dark:text-gray-400">
-                                Masukkan link/nama produk Shopee di sebelah kiri, pilih gaya cerita yang diinginkan, lalu klik <strong>Generate Konten</strong>.
+                                Isi link & spesifikasi produk di sebelah kiri, lalu klik <strong>Generate Konten</strong>. AI akan merangkai cerita yang logis dengan fungsi produk Anda.
                             </p>
                         </div>
 
@@ -274,13 +292,13 @@
                                 <div class="absolute top-0 left-0 w-full h-full border-4 border-shopee-orange border-t-transparent rounded-full animate-spin"></div>
                             </div>
                             <p class="text-xs font-medium text-gray-600 dark:text-gray-300 animate-pulse" id="loadingText">
-                                Menalar produk & merangkai cerita pemicu rasa penasaran...
+                                Menganalisis fungsi produk & menyusun alur cerita dengan curiosity gap...
                             </p>
                         </div>
 
                         <!-- Threads Posts Stream -->
                         <div id="threadsStream" class="hidden w-full space-y-6 text-left">
-                            <!-- Post Card template added via JS -->
+                            <!-- Posts dynamically generated -->
                         </div>
                     </div>
 
@@ -289,7 +307,7 @@
                         <span id="charCount">0 Karakter</span>
                         <span class="flex items-center space-x-1">
                             <i class="fa-solid fa-bolt text-amber-500"></i>
-                            <span>Powered by Gemini 3 Flash</span>
+                            <span>Model: gemini-3-flash-preview</span>
                         </span>
                     </div>
 
@@ -313,14 +331,14 @@
             </div>
 
             <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                Aplikasi ini membutuhkan API Key dari Google Gemini untuk membuat naskah cerita otomatis. API Key disimpan secara lokal di browser Anda.
+                Aplikasi ini menggunakan model <code class="bg-gray-100 dark:bg-threads-bg px-1.5 py-0.5 rounded text-shopee-orange">gemini-3-flash-preview</code> secara langsung dari browser Anda. Kunci API tersimpan di <code class="bg-gray-100 dark:bg-threads-bg px-1.5 py-0.5 rounded">localStorage</code> lokal.
             </p>
 
             <div>
                 <label class="block text-xs font-medium mb-1.5">Gemini API Key</label>
                 <input type="password" id="apiKeyInput" placeholder="AIzaSy..." class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 dark:border-threads-border bg-gray-50 dark:bg-threads-bg text-sm focus:ring-2 focus:ring-shopee-orange focus:outline-none">
                 <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-2">
-                    Belum punya key? Dapatkan gratis di <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-shopee-orange underline">Google AI Studio</a>.
+                    Dapatkan API Key gratis di <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-shopee-orange underline font-semibold">Google AI Studio</a>.
                 </p>
             </div>
 
@@ -341,15 +359,14 @@
         <span id="toastMsg">Berhasil menyalin naskah!</span>
     </div>
 
-    <!-- Application Script -->
+    <!-- Application Logic -->
     <script>
-        // State Management
         let selectedCategory = 'softsell';
         let generatedText = '';
 
         // DOM Elements
-        const productInput = document.getElementById('productInput');
-        const affiliateLinkInput = document.getElementById('affiliateLinkInput');
+        const shopeeLinkInput = document.getElementById('shopeeLinkInput');
+        const productDetailInput = document.getElementById('productDetailInput');
         const toneSelect = document.getElementById('toneSelect');
         const threadModeToggle = document.getElementById('threadModeToggle');
         const generateBtn = document.getElementById('generateBtn');
@@ -366,13 +383,11 @@
         const apiKeyStatus = document.getElementById('apiKeyStatus');
         const apiKeyBanner = document.getElementById('apiKeyBanner');
 
-        // Initial setup
         window.onload = function() {
             checkApiKey();
             setupTheme();
         };
 
-        // Theme Toggle Logic
         function setupTheme() {
             const themeBtn = document.getElementById('themeToggleBtn');
             themeBtn.addEventListener('click', () => {
@@ -380,7 +395,7 @@
             });
         }
 
-        // Category Selection Handling
+        // Category selection
         categoryGrid.addEventListener('click', (e) => {
             const button = e.target.closest('.cat-btn');
             if (!button) return;
@@ -396,7 +411,22 @@
             selectedCategory = button.getAttribute('data-cat');
         });
 
-        // API Key Modal Handlers
+        // Quick Fill function
+        function quickFill(type) {
+            if (type === 'lampu') {
+                shopeeLinkInput.value = 'https://shope.ee/lampu_akrilik_aesthetic';
+                productDetailInput.value = 'Lampu Tidur Akrilik Proyektor Bintang LED 3D, hemat listrik, warna RGB bisa diatur remote, cocok untuk dekorasi kamar estetis dan menenangkan pikiran.';
+            } else if (type === 'panci') {
+                shopeeLinkInput.value = 'https://shope.ee/panci_granit_anti_lengket';
+                productDetailInput.value = 'Satu Set Panci Granit Anti Lengket Premium, bebas PFOA, gagang kayu estetis, mudah dibersihkan tanpa minyak berlebih, awet dan aman untuk kesehatan keluarga.';
+            } else if (type === 'minyak') {
+                shopeeLinkInput.value = 'https://shope.ee/minyak_aromaterapi_rollon';
+                productDetailInput.value = 'Minyak Angin Aromaterapi Roll On (Peppermint & Lavender), meredakan pusing, pegal leher, mual, dan bikin rileks seketika saat stres kerja.';
+            }
+            showToast('Contoh produk berhasil dimuat!', 'info');
+        }
+
+        // API Key Handlers
         document.getElementById('apiKeyModalBtn').addEventListener('click', openApiModal);
 
         function openApiModal() {
@@ -434,7 +464,6 @@
             }
         }
 
-        // Toast Message System
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             const toastMsg = document.getElementById('toastMsg');
@@ -455,26 +484,25 @@
             }, 3000);
         }
 
-        // Category Prompts Mapping
-        const categoryPrompts = {
-            softsell: "Buatkan postingan rekomendasi produk jujur dan halus (soft sell). Mulai dari masalah sepele sehari-hari, berikan solusinya secara santai tanpa terkesan memaksa jualan.",
-            komedi: "Buatkan postingan humoris / komedi konyol yang relate dengan kehidupan masyarakat Indonesia. Kaitkan situasi lucu atau konyol tersebut secara jenaka dengan produk.",
-            storytelling: "Buatkan postingan berbentuk alur cerita narasional (storytelling) yang menarik dari awal hingga akhir. Buat pembaca penasaran dengan apa yang terjadi di tengah cerita.",
-            horor: "Buatkan cerita horor / misteri pendek yang bikin merinding atau penasaran setengah mati. Kaitkan barang/produk ini sebagai bagian dari plot misteri tersebut secara kreatif.",
-            curhat: "Buatkan postingan bergaya curhat emosional / kisah kehidupan pribadi. Bicarakan perjuangan atau momen unik, lalu selipkan produk sebagai barang pembawa perubahan/penyelamat.",
-            kesehatan: "Buatkan tips hidup sehat atau saran praktis sehari-hari. Jelaskan pentingnya menjaga kenyamanan/kesehatan dan bagaimana produk ini sangat membantu."
+        const categoryDescriptions = {
+            softsell: "Posting rekomendasi halus/jujur. Mulai dari keresahan sepele sehari-hari yang dialami orang, berikan solusinya dengan mengarah ke guna produk ini.",
+            komedi: "Cerita humoris atau kejadian konyol sehari-hari yang sangat relate dengan fungsi produk ini secara logis.",
+            storytelling: "Alur narasi mengalir yang memikat. Buat pembaca mengikuti alur cerita sampai mereka sadar barang ini adalah kuncinya.",
+            horor: "Cerita misteri / horor pendek yang terjadi di situasi penggunaan produk (misal: kamar gelap jika produknya lampu, dapur jika alat masak, leher kaku tengah malam jika minyak aromaterapi).",
+            curhat: "Kisah curhat emosional atau pengalaman pribadi yang menyentuh. Produk menjadi 'penyelamat' dari masalah tersebut.",
+            kesehatan: "Tips praktis dan bermanfaat seputar kesehatan/kenyamanan hidup, yang relevan secara nyata dengan kegunaan produk."
         };
 
-        // Main Generation Logic using Gemini API
+        // Generate Content Execution
         generateBtn.addEventListener('click', async () => {
-            const rawInput = productInput.value.trim();
-            const customAffiliateLink = affiliateLinkInput.value.trim();
+            const link = shopeeLinkInput.value.trim();
+            const detail = productDetailInput.value.trim();
             const tone = toneSelect.value;
             const isThread = threadModeToggle.checked;
 
-            if (!rawInput) {
-                showToast('Harap masukkan link atau deskripsi produk Shopee!', 'error');
-                productInput.focus();
+            if (!link && !detail) {
+                showToast('Harap isi setidaknya Link atau Nama & Detail Produk!', 'error');
+                productDetailInput.focus();
                 return;
             }
 
@@ -485,32 +513,38 @@
             generateBtn.disabled = true;
             generateBtn.classList.add('opacity-50');
 
-            // Construct Gemini Prompt
-            const categoryDesc = categoryPrompts[selectedCategory] || categoryPrompts.softsell;
-            const linkToUse = customAffiliateLink || (rawInput.startsWith('http') ? rawInput : 'https://shope.ee/contoh_link');
+            const linkTarget = link || "https://shope.ee/link_affiliate";
+            const categoryDesc = categoryDescriptions[selectedCategory] || categoryDescriptions.softsell;
 
+            // Strict System Prompt to Ensure Accurate Product Reasoning
             const systemPrompt = `
-Anda adalah seorang kreator konten viral ahli di platform Threads (Meta Threads) dan ahli Copywriting Shopee Affiliate.
-Tugas Anda adalah menalar produk dari input pengguna (URL atau deskripsi barang) dan membuatkan naskah postingan Threads yang SANGAT MEMINCIK RASA PENASARAN (curiosity gap) agar pembaca terdorong mengklik link.
+Anda adalah seorang Copywriter Profesional Shopee Affiliate & Kreator Viral di platform Threads.
 
-Aturan Penting:
-1. Gaya Penulisan: Gunakan gaya bahasa khas Threads yang luwes, alami, sering menggunakan spasi antar kalimat agar nyaman dibaca di smartphone.
-2. Gaya Bahasa (Tone): ${tone}.
-3. Kategori Konten: ${categoryDesc}.
-4. Penulisan Link (Hook Halus): Di akhir postingan, cantumkan ajakan mengklik link dengan elegan. Jangan hard sell seperti "Beli di sini!". Gunakan kalimat seperti "Yang kepo barang unik ini, cek di sini ya: [LINK]" atau "Aku taro link barang misterius ini di sini: [LINK]".
-5. Gunakan placeholder [LINK_AFFILIATE] untuk penempatan link affiliate.
-6. Jika mode Utas (Thread) diaktifkan (${isThread ? 'YA' : 'TIDAK'}):
-   ${isThread ? 'Pecah naskah menjadi 2 atau 3 postingan terpisah yang saling menyambung. Beri tanda pembatas tajam "---PARAGRAF_THREAD---" di antara postingan 1, 2, dan 3.' : 'Buat dalam 1 postingan utuh yang solid dan menarik.'}
-7. JANGAN sebut secara blak-blakan semua detail teknis produk di awal. Biarkan ada misteri/keunikan yang hanya bisa terjawab jika mengklik link!
+TUGAS UTAMA:
+Menalar produk dari informasi yang diberikan pengguna, lalu membuatkan postingan Threads yang SANGAT MEMINCIK RASA PENASARAN (curiosity gap) yang secara LOGIS dan AKURAT sesuai 100% dengan fungsi fisik/manfaat nyata dari produk tersebut.
+
+ATURAN STRICT PENALARAN PRODUK:
+1. AKURASI MUTLAK: Anda HANYA BOHLEH membahas fungsi, bentuk, dan kegunaan nyata dari produk yang disebutkan. DILARANG HARD-HALUSINASI atau mengarang fungsi ajaib yang tidak ada pada barang ini!
+2. Jika produk adalah Lampu tidur -> Konteks cerita harus tentang penerangan, suasana malam, kamar, tidur nyenyak, atau estetika kamar.
+3. Jika produk adalah Panci anti lengket -> Konteks cerita harus tentang memasak, masakan gosong, minyak berlebih, atau kemudahan cuci piring.
+4. Jika produk adalah Minyak Aromaterapi -> Konteks cerita harus tentang pusing, leher tegang, stres kerja, atau aromaterapi rileks.
+5. PENUTUP NATURAL (CURIOSITY GAP): Buat kalimat ajakan klik link affiliate di akhir cerita yang memancing orang penasaran untuk melihat bentuk/harga barangnya tanpa terkesan maksa jualan. Contoh: "Yang mau tau bentuk barang unik yang bikin kamar estetik ini, taro linknya di sini: [LINK_AFFILIATE]" atau "Aku spill link barang penyelamat ini di sini ya: [LINK_AFFILIATE]".
+
+FORMAT POSTINGAN:
+- Gunakan gaya bahasa khas Threads (banyak spasi antar baris, kalimat mengalir, santai).
+- Tone: ${tone}.
+- Kategori Konten: ${categoryDesc}.
+- Sertakan placeholder [LINK_AFFILIATE] di bagian ajakan penutup.
+- Mode Utas (Thread): ${isThread ? 'SANGAT PENTING: Pecah cerita menjadi 2 atau 3 postingan terpisah. Pisahkan setiap post persis dengan pemisah "---PARAGRAF_THREAD---"' : 'Buat dalam 1 postingan utuh yang solid.'}
             `;
 
             const userQuery = `
-Produk / Link Shopee: ${rawInput}
-Link Affiliate yang disisipkan: ${linkToUse}
-Format Thread: ${isThread ? 'Multi-post Thread' : 'Single Post'}
+INFORMASI PRODUK:
+- Link Affiliate: ${linkTarget}
+- Nama/Detail/Spesifikasi Produk: ${detail || "Ekstrak penalaran dari URL: " + linkTarget}
+- Mode Utas: ${isThread ? "Aktif (Pisahkan dengan ---PARAGRAF_THREAD---)" : "Satu Post Utuh"}
             `;
 
-            // Call Gemini API (Exponential Backoff Handling)
             try {
                 const apiKey = localStorage.getItem('gemini_api_key') || "";
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
@@ -530,16 +564,17 @@ Format Thread: ${isThread ? 'Multi-post Thread' : 'Single Post'}
                 
                 if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
                     let resultText = data.candidates[0].content.parts[0].text;
-                    // Replace link placeholder if any
-                    resultText = resultText.replaceAll('[LINK_AFFILIATE]', linkToUse);
-                    if (!resultText.includes(linkToUse)) {
-                        resultText += `\n\nYang mau tau barangnya, cek di sini: ${linkToUse}`;
+                    
+                    // Replace placeholder
+                    resultText = resultText.replaceAll('[LINK_AFFILIATE]', linkTarget);
+                    if (!resultText.includes(linkTarget)) {
+                        resultText += `\n\nCek barangnya di sini ya: ${linkTarget}`;
                     }
 
-                    renderThreadsResult(resultText, isThread, linkToUse);
-                    showToast('Konten Threads berhasil digenerate!', 'success');
+                    renderThreadsResult(resultText, isThread, linkTarget);
+                    showToast('Konten berhasil dibuat dengan penalaran akurat!', 'success');
                 } else {
-                    throw new Error('Gagal mendapatkan respon valid dari Gemini AI.');
+                    throw new Error('Gagal memproses respon dari Gemini AI.');
                 }
 
             } catch (err) {
@@ -553,14 +588,12 @@ Format Thread: ${isThread ? 'Multi-post Thread' : 'Single Post'}
             }
         });
 
-        // Exponential backoff fetch wrapper
         async function fetchWithRetry(url, options, maxRetries = 3) {
             let delay = 1000;
             for (let i = 0; i < maxRetries; i++) {
                 try {
                     const res = await fetch(url, options);
                     if (res.status === 429) {
-                        // Rate limit wait
                         await new Promise(r => setTimeout(r, delay));
                         delay *= 2;
                         continue;
@@ -578,7 +611,6 @@ Format Thread: ${isThread ? 'Multi-post Thread' : 'Single Post'}
             }
         }
 
-        // Render Threads UI Preview
         function renderThreadsResult(text, isThread, link) {
             threadsStream.innerHTML = '';
             generatedText = text;
@@ -592,10 +624,9 @@ Format Thread: ${isThread ? 'Multi-post Thread' : 'Single Post'}
                 const postCard = document.createElement('div');
                 postCard.className = 'bg-gray-50 dark:bg-threads-bg p-5 rounded-2xl border border-gray-200 dark:border-threads-border space-y-3 relative transition hover:border-gray-300 dark:hover:border-gray-700';
 
-                // Format links to be clickable/highlighted in preview
                 const formattedText = escapeHtml(cleanedContent).replace(
                     /(https?:\/\/[^\s]+)/g, 
-                    '<a href="$1" target="_blank" class="text-shopee-orange underline font-medium break-all">$1</a>'
+                    '<a href="$1" target="_blank" class="text-shopee-orange font-semibold underline break-all">$1</a>'
                 );
 
                 postCard.innerHTML = `
@@ -612,7 +643,7 @@ Format Thread: ${isThread ? 'Multi-post Thread' : 'Single Post'}
                                 <span class="text-[10px] text-gray-500 dark:text-gray-400">Post ${idx + 1} dari ${posts.length}</span>
                             </div>
                         </div>
-                        <button onclick="copySinglePost(\`${escapeJsString(cleanedContent)}\`)" class="text-gray-400 hover:text-shopee-orange text-xs p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-threads-card transition" title="Salin Bagian Ini">
+                        <button onclick="copySinglePost(\`${escapeJsString(cleanedContent)}\`)" class="text-gray-400 hover:text-shopee-orange text-xs p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-threads-card transition" title="Salin Post Ini">
                             <i class="fa-regular fa-copy"></i>
                         </button>
                     </div>
@@ -637,17 +668,16 @@ Format Thread: ${isThread ? 'Multi-post Thread' : 'Single Post'}
             charCount.textContent = `${text.length} Karakter Total`;
         }
 
-        // Copy Clipboard Helpers
         copyBtn.addEventListener('click', () => {
             if (!generatedText) return;
             const textToCopy = generatedText.replaceAll('---PARAGRAF_THREAD---', '\n\n');
             copyToClipboard(textToCopy);
-            showToast('Seluruh teks naskah berhasil disalin!', 'success');
+            showToast('Seluruh teks berhasil disalin!', 'success');
         });
 
         function copySinglePost(content) {
             copyToClipboard(content);
-            showToast('Bagian postingan berhasil disalin!', 'success');
+            showToast('Post berhasil disalin!', 'success');
         }
 
         function copyToClipboard(text) {
